@@ -1,6 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import math
+from matplotlib.animation import FuncAnimation
+
 
 print("Program służy do wizualizacji rzutu ukośnego.\n"
       "\nRzut ukośny to złożenie dwóch ruchów: jednostajnego w poziomie i jednostajnie zmiennego w pionie,\n"
@@ -18,41 +20,41 @@ def rzut_ukosny():
     while 1:
         try:
             h = float(input("1.Wysokości początkowej:\n"
-                  "jednostka: metry [m]"))
+                  "jednostka: metry [m]\n"))
             while h < 0:
                 print("Błędne dane: podaj wartość liczbową większą od 0.")
                 h = float(input("1.Wysokości początkowej:\n"
-                                "jednostka: metry [m]"))
+                                "jednostka: metry [m]\n"))
                 break
             break
-        except ValueError:
+        except TypeError:
             print("Błędne dane: podaj wartość liczbową.")
 
     while 2:
         try:
             V0 = float(input("2.Prędkości początkowej:\n"
-          "jednostka: metry na sekundę [m/s]"))
+          "jednostka: metry na sekundę [m/s]\n"))
             while V0 < 0:
                 print("Błędne dane: podaj wartość liczbową większą od 0.")
                 V0 = float(input("2.Prędkości początkowej:\n"
-                                 "jednostka: metry na sekundę [m/s]"))
+                                 "jednostka: metry na sekundę [m/s]\n"))
                 break
             break
-        except ValueError:
+        except TypeError:
             print("Błędne dane: podaj wartość liczbową.")
 
     while 3:
         try:
             a = float(input("3.Kąta, pod którym ciało zostanie wyrzucone:\n"
-                            "UWAGA: wybierz kąt z przedziału <0, pi/2>"))
+                            "UWAGA: wybierz kąt z przedziału <0, pi/2>\n"))
             while a > (math.pi/2) or a < 0:
 
                 print("Błędne dane: podaj wartość liczbową z przedziału <0, pi/2>.")
                 a = float(input("3.Kąta, pod którym ciało zostanie wyrzucone:\n"
-                                "UWAGA: wybierz kąt z przedziału <0-pi/2>"))
+                                "UWAGA: wybierz kąt z przedziału <0-pi/2>\n"))
                 break
             break
-        except ValueError:
+        except TypeError:
             print("Błędne dane: podaj wartość liczbową.")
 
     t = np.linspace(0,5,100)
@@ -62,13 +64,41 @@ def rzut_ukosny():
     x = V0 * t * b
     y = h + (V0 * c * t - (g * t * t)/2)
     z = 2*V0*V0*c*b/g
-    hmax = V0*V0*c*c/(2*g)
-    print('Dla podanych parametrów zasięg rzutu wynosi:',z,'m, wysokość maksymalna:',hmax,'m.')
+    hmax = ((V0*V0*c*c)/(2*g))+h
+    print('Dla podanych parametrów zasięg rzutu wynosi:',round(z,2),'m, wysokość maksymalna:',round(hmax,2),'m.')
 
 
-    plt.plot(x, y)
+    plt.plot(x, y, color='m', lw = 2)
     plt.xlim(0,10)
     plt.ylim(0, 10)
+    plt.xlabel('x[m]', fontsize=12)
+    plt.ylabel('y[m]', fontsize=12)
+    plt.title('Wykres rzutu ukośnego',fontsize=20)
+    plt.grid(True)
+    label = (round((z/2),2),round((hmax),2))
+    plt.annotate(label,
+                    xy=(z/2, hmax),
+                    xytext=(z/2, hmax+1),
+                    arrowprops={'arrowstyle': '->'}
+                    )
+
+    plt.show()
+
+    fig, ax = plt.subplots()
+    x_data = []
+    y_data = []
+    line = ax.plot(x)
+    ax.set_xlim(0, 10)
+    ax.set_ylim(0, 10)
+    ax.set_ylabel('x[m]', fontsize=12)
+    ax.set_xlabel('y[m]', fontsize=12)
+
+#    def animacja():
+
+        #xdata.append()
+        #ydata.append()
+
+
     plt.show()
 
 rzut_ukosny()
