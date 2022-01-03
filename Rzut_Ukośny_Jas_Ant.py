@@ -27,7 +27,7 @@ def rzut_ukosny():
                                 "jednostka: metry [m]\n"))
                 break
             break
-        except TypeError:
+        except ValueError:
             print("Błędne dane: podaj wartość liczbową.")
 
     while 2:
@@ -40,7 +40,7 @@ def rzut_ukosny():
                                  "jednostka: metry na sekundę [m/s]\n"))
                 break
             break
-        except TypeError:
+        except ValueError:
             print("Błędne dane: podaj wartość liczbową.")
 
     while 3:
@@ -54,7 +54,7 @@ def rzut_ukosny():
                                 "UWAGA: wybierz kąt z przedziału <0-pi/2>\n"))
                 break
             break
-        except TypeError:
+        except ValueError:
             print("Błędne dane: podaj wartość liczbową.")
 
     t = np.linspace(0,5,100)
@@ -69,8 +69,8 @@ def rzut_ukosny():
 
 
     plt.plot(x, y, color='m', lw = 2)
-    plt.xlim(0,10)
-    plt.ylim(0, 10)
+    plt.xlim(0,20)
+    plt.ylim(0, 20)
     plt.xlabel('x[m]', fontsize=12)
     plt.ylabel('y[m]', fontsize=12)
     plt.title('Wykres rzutu ukośnego',fontsize=20)
@@ -84,21 +84,24 @@ def rzut_ukosny():
 
     plt.show()
 
-    fig, ax = plt.subplots()
-    x_data = []
-    y_data = []
-    line = ax.plot(x)
-    ax.set_xlim(0, 10)
-    ax.set_ylim(0, 10)
+
+    fig = plt.figure()
+    ax = fig.add_subplot()
+    line, = plt.plot(x, y)
+    ax.set_xlim(0, 20)
+    ax.set_ylim(0, 20)
     ax.set_ylabel('x[m]', fontsize=12)
     ax.set_xlabel('y[m]', fontsize=12)
+    particle, = plt.plot(x, y, marker='o')
+    traj, = plt.plot(x, y)
 
-#    def animacja():
+    def animacja(i):
+        particle.set_data(x[i], y[i])
+        traj.set_data(x[:i + 1], y[:i + 1])
+        return particle, traj
 
-        #xdata.append()
-        #ydata.append()
-
-
+    ani = FuncAnimation(fig, animacja, np.arange(0, 50), interval=25)
     plt.show()
+
 
 rzut_ukosny()
