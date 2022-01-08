@@ -2,16 +2,22 @@ import numpy as np
 import matplotlib.pyplot as plt
 import math
 from matplotlib.animation import FuncAnimation
+import time
+from tkinter import *
 
+plik = open('Rzut_Ukosny_dane.txt','w')
 
-print("Program służy do wizualizacji rzutu ukośnego.\n"
-      "\nRzut ukośny to złożenie dwóch ruchów: jednostajnego w poziomie i jednostajnie zmiennego w pionie,\n"
-      "gdzie podczas wznoszenia ciała występuje ruch jednostajnie opóźniony, natomiast w czasie spadku - jednostajnie przyspieszony.\n"
-      "Ciału umieszczonemu na poziomie początkowym nadaje się prędkość początkową, skierowaną pod katem alfa do tego poziomu.\n"
-      "Ciało w rzucie ukośnym porusza się po paraboli z ramionami skierowanymi do dołu.\n"
-      "\nProgram umożliwia ustawienie wysokości początkowej, prędkości początkowej oraz kąta,\n"
-      "pod którym wyrzucone zostanie ciało.\n"
-      "Po wprowadzeniu wszystkich danych, program wyświetli wykres rzutu, jego animację oraz zapisze dane do pliku.\n")
+f ="Program sluzy do wizualizacji rzutu ukosnego.\n" \
+    "\nRzut ukosny to zlozenie dwoch ruchow: jednostajnego w poziomie i jednostajnie zmiennego w pionie,\n" \
+    "gdzie podczas wznoszenia ciala wystepuje ruch jednostajnie opozniony, natomiast w czasie spadku - jednostajnie przyspieszony.\n" \
+    "Cialu umieszczonemu na poziomie poczatkowym nadaje sie predkosc poczatkowa, skierowana pod katem alfa do tego poziomu.\n" \
+    "Cialo w rzucie ukosnym porusza sie po paraboli z ramionami skierowanymi do dolu.\n"\
+    "\nProgram umozliwia ustawienie wysokosci poczatkowej, predkosci poczatkowej oraz kata,\n"\
+    "pod ktorym wyrzucone zostanie cialo.\n"\
+    "Po wprowadzeniu wszystkich danych, program wyswietli wykres rzutu, jego animacje oraz zapisze dane do pliku.\n"
+print(f)
+plik.write(f)
+
 
 def rzut_ukosny():
     g = 9.81
@@ -57,6 +63,7 @@ def rzut_ukosny():
         except ValueError:
             print("Błędne dane: podaj wartość liczbową.")
 
+
     t = np.linspace(0,5,100)
 
     b = math.cos(a)
@@ -67,6 +74,8 @@ def rzut_ukosny():
     hmax = ((V0*V0*c*c)/(2*g))+h
     print('Dla podanych parametrów zasięg rzutu wynosi:',round(z,2),'m, wysokość maksymalna:',round(hmax,2),'m.')
 
+    print('\nWysokosc poczatkowa:',h,'m\nPredkosc poczatkowa:',V0,'m/s\nKat wyrzutu:',a,file=plik)
+    print('Dla podanych parametrow zasieg rzutu wynosi:', round(z, 2), 'm, wysokosc maksymalna:', round(hmax, 2), 'm.', file=plik)
 
     plt.plot(x, y, color='m', lw = 2)
     plt.xlim(0,20)
@@ -81,19 +90,20 @@ def rzut_ukosny():
                     xytext=(z/2, hmax+1),
                     arrowprops={'arrowstyle': '->'}
                     )
-
+    plt.savefig("wykres_rzutu_ukosnego.png")
     plt.show()
 
 
     fig = plt.figure()
     ax = fig.add_subplot()
-    line, = plt.plot(x, y)
+    line = plt.plot(x, y, color='#f0adcf')
     ax.set_xlim(0, 20)
     ax.set_ylim(0, 20)
-    ax.set_ylabel('x[m]', fontsize=12)
-    ax.set_xlabel('y[m]', fontsize=12)
-    particle, = plt.plot(x, y, marker='o')
-    traj, = plt.plot(x, y)
+    ax.set_ylabel('y[m]', fontsize=12)
+    ax.set_xlabel('x[m]', fontsize=12)
+    plt.title('Animacja rzutu ukośnego', fontsize=20)
+    particle, = plt.plot(x, y, marker='o', color='#8c0047')
+    traj, = plt.plot(x, y, color='#ab0a5c', alpha=0.8)
 
     def animacja(i):
         particle.set_data(x[i], y[i])
@@ -101,7 +111,8 @@ def rzut_ukosny():
         return particle, traj
 
     ani = FuncAnimation(fig, animacja, np.arange(0, 50), interval=25)
+
     plt.show()
 
-
 rzut_ukosny()
+
