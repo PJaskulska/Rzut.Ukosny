@@ -2,8 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import math
 from matplotlib.animation import FuncAnimation
-import time
-from tkinter import *
 
 plik = open('Rzut_Ukosny_dane.txt','w')
 
@@ -94,6 +92,11 @@ def rzut_ukosny():
     plt.show()
 
 
+    t_min = 0
+    t_max = (V0*c/g)+((2*hmax/g)**(1/2))
+    dt = 0.05
+    t = np.arange(t_min, t_max+dt, dt)
+
     fig = plt.figure()
     ax = fig.add_subplot()
     line = plt.plot(x, y, color='#f0adcf')
@@ -105,14 +108,21 @@ def rzut_ukosny():
     particle, = plt.plot(x, y, marker='o', color='#8c0047')
     traj, = plt.plot(x, y, color='#ab0a5c', alpha=0.8)
 
+    czasomierz = 'czas = %.2fs'
+    time_text = ax.text(0.75, 0.8, '', transform=ax.transAxes)
+
+    print('Czas rzutu:', round(t_max,2), 's', file=plik)
+
     def animacja(i):
         particle.set_data(x[i], y[i])
         traj.set_data(x[:i + 1], y[:i + 1])
-        return particle, traj
+        time_text.set_text(czasomierz % (i * dt))
+        return particle, traj, time_text
 
-    ani = FuncAnimation(fig, animacja, np.arange(0, 50), interval=25)
 
+    ani = FuncAnimation(fig, animacja, np.arange(0, len(t)), interval = 70, repeat = False)
     plt.show()
 
-rzut_ukosny()
+    plik.close()
 
+rzut_ukosny()
