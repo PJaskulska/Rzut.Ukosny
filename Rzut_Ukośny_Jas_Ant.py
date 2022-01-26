@@ -25,8 +25,8 @@ def rzut_ukosny():
         try:
             h = float(input("1.Wysokości początkowej:\n"
                   "jednostka: metry [m]\n"))
-            while h < 0:
-                print("Błędne dane: podaj wartość liczbową większą od 0.")
+            while h < 0 or h > 15:
+                print("Błędne dane: podaj wartość liczbową większą od 0 i mniejszą od 15.")
                 h = float(input("1.Wysokości początkowej:\n"
                                 "jednostka: metry [m]\n"))
                 break
@@ -38,8 +38,8 @@ def rzut_ukosny():
         try:
             V0 = float(input("2.Prędkości początkowej:\n"
           "jednostka: metry na sekundę [m/s]\n"))
-            while V0 < 0:
-                print("Błędne dane: podaj wartość liczbową większą od 0.")
+            while V0 < 0 or V0 > 12:
+                print("Błędne dane: podaj wartość liczbową większą od 0 i mniejszą od 12.")
                 V0 = float(input("2.Prędkości początkowej:\n"
                                  "jednostka: metry na sekundę [m/s]\n"))
                 break
@@ -126,3 +126,4 @@ def rzut_ukosny():
     plik.close()
 
 rzut_ukosny()
+
